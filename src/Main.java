@@ -1,28 +1,33 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		int N = scan.nextInt();
-		int M = scan.nextInt();
-		int[] card = new int[N];
-		for(int i = 0; i < N; i++) {
-			card[i] = scan.nextInt();
-		}
 		scan.close();
-		Arrays.sort(card);
-		int result = 0;
-		for(int i = 0; i < N-2; i++) {
-			for(int j = i+1; j < N-1; j++) {
-				for(int k = j+1; k < N; k++) {
-					int sum = card[i] + card[j] + card[k];
-					if(sum <= M && result <= sum) {
-						result = sum;
-					}
-				}
-			}
+		int result = N;
+	for(int i = 0; i < N; i++) {
+		int sum = 0;
+		if(i / 100000 != 0) {
+			sum = i + (i / 100000) + ((i%100000)/10000) + ((i%10000)/1000) + ((i%1000)/100) + ((i%100)/10) + i%10;
+		}else if(i / 10000 != 0) {
+			sum = i + ((i%100000)/10000) + ((i%10000)/1000) + ((i%1000)/100) + ((i%100)/10) + i%10;
+		}else if(i / 1000 != 0) {
+			sum = i + ((i%10000)/1000) + ((i%1000)/100) + ((i%100)/10) + i%10;
+		}else if(i / 100 != 0) {
+			sum = i + ((i%1000)/100) + ((i%100)/10) + i%10;
+		}else if( i / 10 != 0) {
+			sum = i + ((i%100)/10) + i%10;
+		}else {
+			sum = i + i%10;
 		}
+		if(sum == N && result > i) {
+			result = i;
+		}
+	}
+	if(result == N) {
+		result = 0;
+	}
 		System.out.print(result);
 	}
 }
