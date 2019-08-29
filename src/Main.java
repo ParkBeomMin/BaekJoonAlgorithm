@@ -5,7 +5,6 @@ public class Main {
 		Scanner scan = new Scanner(System.in);
 		int N = scan.nextInt();
 		int K = scan.nextInt();
-		int K_ = K;
 		double preference[] = new double[N];
 		for (int i = 0; i < N; i++) {
 			preference[i] = scan.nextDouble();
