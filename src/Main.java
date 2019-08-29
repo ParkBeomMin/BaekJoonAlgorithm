@@ -4,25 +4,40 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		int N = scan.nextInt();
-		int arr[][] = new int[N][2];
+		int K = scan.nextInt();
+		int K_ = K;
+		double preference[] = new double[N];
 		for (int i = 0; i < N; i++) {
-			arr[i][0] = scan.nextInt();
-			arr[i][1] = scan.nextInt();
+			preference[i] = scan.nextDouble();
 		}
 		scan.close();
-		int result[] = new int[N];
-		for (int i = 0; i < N; i++) {
-			int weight = arr[i][0];
-			int height = arr[i][1];
-			for (int j = 0; j < N; j++) {
-				if (weight < arr[j][0] && height < arr[j][1]) {
-					result[i] = result[i] + 1;
-				}
+		double result = Double.MAX_VALUE;
+
+		for (int i = K; i <= N; i++) {
+			for (int j = 0; j <= N - i; j++) {
+				double m = getM(preference, j, i);
+				double b = getB(preference, m, j, i);
+				result = Math.min(result, b);
 			}
 		}
-		for (int i = 0; i < N; i++) {
-			System.out.print(result[i]+1 + " ");
-		}
+		result = Double.parseDouble(String.format("%.11f", result));
+		System.out.print(result);
 
+	}
+
+	public static double getM(double[] preference, int pivot, int K) { // 평균구하기
+		double sum = 0.0;
+		for (int i = 0; i < K; i++) {
+			sum += preference[pivot + i];
+		}
+		return sum / K;
+	}
+
+	public static double getB(double[] preference, double m, int pivot, int K) {
+		double sum = 0.0;
+		for (int i = 0; i < K; i++) {
+			sum += Math.pow((preference[pivot + i] - m), 2);
+		}
+		return Math.sqrt((sum / K));
 	}
 }
