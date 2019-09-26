@@ -6,27 +6,38 @@ public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		InputStreamReader k = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(k);
-		int n = Integer.parseInt(br.readLine());
-		
+		String[] input = br.readLine().split(" ");
+		int n = Integer.parseInt(input[0]);
+		int m = Integer.parseInt(input[1]);
+		int result = 51;
+		char[][] board = new char[n][m];
+		String[] whiteBoard = { "WBWBWBWB", "BWBWBWBW", "WBWBWBWB", "BWBWBWBW", "WBWBWBWB", "BWBWBWBW", "WBWBWBWB",
+				"BWBWBWBW" };
+		String[] blackBoard = { "BWBWBWBW", "WBWBWBWB", "BWBWBWBW", "WBWBWBWB", "BWBWBWBW", "WBWBWBWB", "BWBWBWBW",
+				"WBWBWBWB", };
 		for (int i = 0; i < n; i++) {
-			int num = Integer.parseInt(br.readLine());
-			int[] dp_zero = new int[num+1];
-			int[] dp_one = new int[num+1];
-			
-			for (int j = 0; j <= num; j++) {
-				if(j == 0) {
-					dp_zero[j] = 1;
-					dp_one[j] = 0;
-				}else if(j == 1) {
-					dp_zero[j] = 0;
-					dp_one[j] = 1;
-				}else {
-					dp_zero[j] = dp_zero[j-1] + dp_zero[j-2];
-					dp_one[j] = dp_one[j-1] + dp_one[j-2];	
-				}
-				
+			String data = br.readLine();
+			for (int j = 0; j < m; j++) {
+				board[i][j] = data.charAt(j);
 			}
-			System.out.println(dp_zero[num] + " " + dp_one[num]);
 		}
+		for (int i = 0; i + 7 < n; i++) {
+			for (int j = 0; j + 7 < m; j++) {
+				result = Math.min(result, Math.min(check(i, j, board, whiteBoard), check(i, j, board, blackBoard)));
+			}
+		}
+		System.out.print(result);
+	}
+
+	static int check(int x, int y, char[][] board, String[] checkBoard) {
+		int cnt = 0;
+		for (int i = x; i < x + 8; i++) {
+			for (int j = y; j < y + 8; j++) {
+				if (board[i][j] != checkBoard[i - x].charAt(j - y)) {
+					cnt++;
+				}
+			}
+		}
+		return cnt;
 	}
 }
