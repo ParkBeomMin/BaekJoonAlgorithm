@@ -7,13 +7,11 @@ public class Main {
 		InputStreamReader k = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(k);
 		int n = Integer.parseInt(br.readLine());
-		long[] dp = new long[n+1];
-		dp[0] = 0;
-		dp[1] = 1;
-		for(int i = 2; i <= n; i++) {
-			dp[i] = dp[i-1] + dp[i-2];
+		String nums = br.readLine();
+		int result = 0;
+		for(int i = 0; i < n; i++) {
+			result += Integer.parseInt(String.valueOf(nums.charAt(i)));
 		}
-		System.out.print(dp[n]);
-
+		System.out.print(result);
 	}
 }
