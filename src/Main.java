@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Stack;
 
 public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -8,17 +9,34 @@ public class Main {
 		BufferedReader br = new BufferedReader(isr);
 
 		int n = Integer.parseInt(br.readLine());
-		int[] wine = new int[10001];
-		long[] dp = new long[10001];
-		for (int i = 1; i <= n; i++) {
-			wine[i] = Integer.parseInt(br.readLine());
-		}
-		dp[1] = wine[1];
-		dp[2] = wine[1] + wine[2];
-		for (int i = 3; i <= n; i++) {
-			dp[i] = Math.max(dp[i - 1], Math.max(dp[i - 2] + wine[i], dp[i - 3] + wine[i - 1] + wine[i]));
-		}
-		System.out.print(dp[n]);
+		Stack<String> stack = new Stack<>();
+		Stack<String> stack_ = new Stack<>();
 
+		for (int i = 0; i < n; i++) {
+			String input = br.readLine();
+			for (int j = 0; j < input.length(); j++) {
+				stack.push(String.valueOf(input.charAt(j)));
+
+			}
+
+			for (int j = 0; j < input.length(); j++) {
+				if (stack.peek().equals(")")) {
+					stack_.push(stack.pop());
+				} else {
+					if (!stack_.isEmpty()) {
+						stack.pop();
+						stack_.pop();
+					}
+				}
+			}
+
+			if (!stack_.isEmpty() || !stack.isEmpty()) {
+				System.out.println("NO");
+			} else {
+				System.out.println("YES");
+			}
+			stack.clear();
+			stack_.clear();
+		}
 	}
 }
