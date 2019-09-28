@@ -4,20 +4,31 @@ import java.io.InputStreamReader;
 
 public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
-		InputStreamReader k = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(k);
-		int T = Integer.parseInt(br.readLine());
-		for (int i = 0; i < T; i++) {
-			int n = Integer.parseInt(br.readLine());
-			long[] dp = new long[101];
-			dp[0] = 1;
-			dp[1] = 1;
-			dp[2] = 1;
-			for (int j = 3; j < 101; j++) {
-				dp[j] = dp[j - 2] + dp[j - 3];
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(isr);
+		String[] input = br.readLine().split("-");
+		int sum = 0;
+		for(int i = 0; i < input.length; i++) {
+			String tmp = input[i];
+			if(i == 0) {
+				if(tmp.contains("+")) {
+					for(String num : tmp.split("\\+")) {
+						sum += Integer.parseInt(num);
+					}
+				}else {
+					sum += Integer.parseInt(tmp);
+				}
+			}else {
+				if(tmp.contains("+")) {
+					for(String num : tmp.split("\\+")) {
+						sum -= Integer.parseInt(num);
+					}
+				}else {
+					sum -= Integer.parseInt(tmp);
+				}
 			}
-			System.out.println(dp[n - 1]);
 		}
-
+		
+		System.out.print(sum);
 	}
 }
