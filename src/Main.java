@@ -1,42 +1,41 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-
-		int n = Integer.parseInt(br.readLine());
-		Stack<String> stack = new Stack<>();
-		Stack<String> stack_ = new Stack<>();
-
-		for (int i = 0; i < n; i++) {
-			String input = br.readLine();
-			for (int j = 0; j < input.length(); j++) {
-				stack.push(String.valueOf(input.charAt(j)));
-
-			}
-
-			for (int j = 0; j < input.length(); j++) {
-				if (stack.peek().equals(")")) {
-					stack_.push(stack.pop());
-				} else {
-					if (!stack_.isEmpty()) {
-						stack.pop();
-						stack_.pop();
-					}
-				}
-			}
-
-			if (!stack_.isEmpty() || !stack.isEmpty()) {
-				System.out.println("NO");
-			} else {
-				System.out.println("YES");
-			}
-			stack.clear();
-			stack_.clear();
+		String[] input = br.readLine().split(" ");
+		int n = Integer.parseInt(input[0]);
+		int k = Integer.parseInt(input[1]);
+		Queue<Integer> queue = new LinkedList<>();
+		Queue<Integer> result = new LinkedList<>();
+		for (int i = 1; i <= n; i++) {
+			queue.offer(i);
 		}
+		int turn = 1;
+		while (!queue.isEmpty()) {
+			if (turn == k) {
+				result.offer(queue.poll());
+				turn = 1;
+			} else {
+				queue.offer(queue.poll());
+				turn++;
+			}
+		}
+		System.out.print("<");
+		while (!result.isEmpty()) {
+			if(result.size() == 1) {
+				System.out.print(result.poll());
+			}else {
+				System.out.print(result.poll() + ", ");	
+			}
+		}
+		System.out.print(">");
+
+
 	}
 }
