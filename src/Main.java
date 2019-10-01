@@ -1,41 +1,30 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		String[] input = br.readLine().split(" ");
-		int n = Integer.parseInt(input[0]);
-		int k = Integer.parseInt(input[1]);
-		Queue<Integer> queue = new LinkedList<>();
-		Queue<Integer> result = new LinkedList<>();
-		for (int i = 1; i <= n; i++) {
-			queue.offer(i);
+		String input = br.readLine();
+		int[] result = new int[26];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = -1;
 		}
-		int turn = 1;
-		while (!queue.isEmpty()) {
-			if (turn == k) {
-				result.offer(queue.poll());
-				turn = 1;
-			} else {
-				queue.offer(queue.poll());
-				turn++;
-			}
-		}
-		System.out.print("<");
-		while (!result.isEmpty()) {
-			if(result.size() == 1) {
-				System.out.print(result.poll());
-			}else {
-				System.out.print(result.poll() + ", ");	
-			}
-		}
-		System.out.print(">");
+		for (int i = 0; i < input.length(); i++) {
+			for (int j = 0; j < result.length; j++) {
+				if (input.charAt(i) == 'a' + j) {
+					if (result[j] == -1) {
+						result[j] = i;
+					}
 
+				}
+			}
+
+		}
+		for (int i = 0; i < result.length; i++) {
+			System.out.print(result[i] + " ");
+		}
 
 	}
 }
