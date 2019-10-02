@@ -1,65 +1,112 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
 
 public class Main {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		String input = br.readLine();
-		Stack<Character> stack = new Stack<>();
-		Stack<Character> rightStack = new Stack<>();
-		while (!input.equals(".")) { // 종료 조건
-			for (int i = 0; i < input.length(); i++) {
-				if (input.charAt(i) == '(' || input.charAt(i) == ')' || input.charAt(i) == '['
-						|| input.charAt(i) == ']') {
-					stack.push(input.charAt(i));
-				}
+		int n = Integer.parseInt(br.readLine());
+		int[][] cartolina = new int[n][n];
+		int[] num = new int[2];
+		for (int i = 0; i < n; i++) {
+			String[] input = br.readLine().split(" ");
+			for (int j = 0; j < n; j++) {
+				cartolina[i][j] = Integer.parseInt(input[j]);
 			}
-			boolean isBalance = isBalance(stack, rightStack);
-			if (isBalance) {
-				System.out.println("yes");
-			} else {
-				System.out.println("no");
+		}
+		cut(cartolina, num);
+		System.out.println(num[0]);
+		System.out.println(num[1]);
+	}
+
+	static void cut(int[][] arr, int[] num) {
+		if (arr.length == 1 || isWhite(arr) || isBlue(arr)) {
+			if (isWhite(arr)) {
+				num[0]++;
+			} else if (isBlue(arr)) {
+				num[1]++;
 			}
-			stack.clear();
-			rightStack.clear();
-			input = br.readLine();
+			return;
+		} else {
+			cut(createCutArray(arr, arr.length / 2, 0), num);
+			cut(createCutArray(arr, arr.length / 2, 1), num);
+			cut(createCutArray(arr, arr.length / 2, 2), num);
+			cut(createCutArray(arr, arr.length / 2, 3), num);
 		}
 	}
 
-	static boolean isBalance(Stack<Character> stack, Stack<Character> rStack) {
-		while (!stack.isEmpty()) {
-			char tmp = stack.pop();
-			if (tmp == '(' || tmp == '[') {
-				if (!rStack.isEmpty()) {
-					char rightTmp = rStack.pop();
-					if (tmp == '(') {
-						if (rightTmp == ']') {
-							rStack.push(rightTmp);
-							break;
-						}
-					} else {
-						if (rightTmp == ')') {
-							rStack.push(rightTmp);
-							break;
-						}
-					}
-				} else {
-					stack.push(tmp);
+	static int[][] createCutArray(int[][] arr, int n, int flag) {
+		int[][] cutArr = new int[n][n];
+		switch (flag) {
+		case 0: { // 좌상단
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					cutArr[i][j] = arr[i][j];
+				}
+			}
+			break;
+		}
+		case 1: { // 우상단
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					cutArr[i][j] = arr[i + n][j];
+				}
+			}
+			break;
+		}
+		case 2: { // 좌하단
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					cutArr[i][j] = arr[i][j + n];
+				}
+			}
+			break;
+		}
+		case 3: { // 우하단
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					cutArr[i][j] = arr[i + n][j + n];
+				}
+			}
+			break;
+		}
+		}
+
+		return cutArr;
+	}
+
+	static boolean isWhite(int[][] arr) {
+		boolean flag = true;
+		int tmp = 0;
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 0; j < arr.length; j++) {
+				if (tmp != arr[i][j]) {
+					flag = false;
 					break;
 				}
-			} else if (tmp == ')' || tmp == ']') {
-				rStack.push(tmp);
+				if (!flag) {
+					break;
+				}
 			}
-
 		}
-		if (stack.isEmpty() && rStack.isEmpty()) {
-			return true;
-		} else {
-			return false;
+		return flag;
+	}
 
+	static boolean isBlue(int[][] arr) {
+		boolean flag = true;
+		int tmp = 1;
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 0; j < arr.length; j++) {
+				if (tmp != arr[i][j]) {
+					flag = false;
+					break;
+				}
+			}
+			if (!flag) {
+				break;
+			}
 		}
+		return flag;
 	}
 }
