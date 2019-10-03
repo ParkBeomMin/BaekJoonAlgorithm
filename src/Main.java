@@ -7,106 +7,42 @@ public class Main {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
 		int n = Integer.parseInt(br.readLine());
-		int[][] cartolina = new int[n][n];
-		int[] num = new int[2];
+		int[] arr = new int[n];
 		for (int i = 0; i < n; i++) {
-			String[] input = br.readLine().split(" ");
-			for (int j = 0; j < n; j++) {
-				cartolina[i][j] = Integer.parseInt(input[j]);
-			}
+			int input = Integer.parseInt(br.readLine());
+			arr[i] = input;
 		}
-		cut(cartolina, num);
-		System.out.println(num[0]);
-		System.out.println(num[1]);
-	}
 
-	static void cut(int[][] arr, int[] num) {
-		if (arr.length == 1 || isWhite(arr) || isBlue(arr)) {
-			if (isWhite(arr)) {
-				num[0]++;
-			} else if (isBlue(arr)) {
-				num[1]++;
-			}
-			return;
-		} else {
-			cut(createCutArray(arr, arr.length / 2, 0), num);
-			cut(createCutArray(arr, arr.length / 2, 1), num);
-			cut(createCutArray(arr, arr.length / 2, 2), num);
-			cut(createCutArray(arr, arr.length / 2, 3), num);
+		quickSort(arr, 0, arr.length - 1);
+		for (int i = 0; i < n; i++) {
+			System.out.println(arr[i]);
 		}
 	}
 
-	static int[][] createCutArray(int[][] arr, int n, int flag) {
-		int[][] cutArr = new int[n][n];
-		switch (flag) {
-		case 0: { // 좌상단
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					cutArr[i][j] = arr[i][j];
-				}
+	static void quickSort(int[] arr, int left, int right) {
+		int pivot = arr[(left + right) / 2];
+		int mLeft = left;
+		int mRight = right;
+		while (mLeft <= mRight) {
+			while (pivot > arr[mLeft]) {
+				mLeft++;
 			}
-			break;
-		}
-		case 1: { // 우상단
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					cutArr[i][j] = arr[i + n][j];
-				}
+			while (pivot < arr[mRight]) {
+				mRight--;
 			}
-			break;
-		}
-		case 2: { // 좌하단
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					cutArr[i][j] = arr[i][j + n];
-				}
-			}
-			break;
-		}
-		case 3: { // 우하단
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					cutArr[i][j] = arr[i + n][j + n];
-				}
-			}
-			break;
-		}
-		}
-
-		return cutArr;
-	}
-
-	static boolean isWhite(int[][] arr) {
-		boolean flag = true;
-		int tmp = 0;
-		for (int i = 0; i < arr.length; i++) {
-			for (int j = 0; j < arr.length; j++) {
-				if (tmp != arr[i][j]) {
-					flag = false;
-					break;
-				}
-				if (!flag) {
-					break;
-				}
+			if (mLeft <= mRight) {
+				int tmp = arr[mLeft];
+				arr[mLeft] = arr[mRight];
+				arr[mRight] = tmp;
+				mLeft++;
+				mRight--;
 			}
 		}
-		return flag;
-	}
-
-	static boolean isBlue(int[][] arr) {
-		boolean flag = true;
-		int tmp = 1;
-		for (int i = 0; i < arr.length; i++) {
-			for (int j = 0; j < arr.length; j++) {
-				if (tmp != arr[i][j]) {
-					flag = false;
-					break;
-				}
-			}
-			if (!flag) {
-				break;
-			}
+		if (left < mRight) {
+			quickSort(arr, left, mRight);
 		}
-		return flag;
+		if (mLeft < right) {
+			quickSort(arr, mLeft, right);
+		}
 	}
 }
