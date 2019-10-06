@@ -37,9 +37,9 @@ public class Main {
 
 		@Override
 		public int compareTo(Point o) {
-			if (this.x >= o.x) {
-				if (this.x == o.x) {
-					if (this.y >= o.y) {
+			if (this.y >= o.y) {
+				if (this.y == o.y) {
+					if (this.x >= o.x) {
 						return 1;
 					} else {
 						return -1;
