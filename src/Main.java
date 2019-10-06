@@ -12,42 +12,44 @@ public class Main {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
 		int n = Integer.parseInt(br.readLine());
-		Point[] points = new Point[n];
-		for(int i = 0; i < n; i++) {
-			String[] input = br.readLine().split(" ");
-			points[i] = new Point(Integer.parseInt(input[0]), Integer.parseInt(input[1]));
+		MyWord[] words = new MyWord[n];
+		for (int i = 0; i < n; i++) {
+			String input = br.readLine();
+			words[i] = new MyWord(input);
 		}
-		Arrays.sort(points);
-		for(int i = 0; i < n; i++) {
-			System.out.println(points[i].x + " " + points[i].y);
+		Arrays.sort(words);
+		for (int i = 0; i < words.length; i++) {
+			String tmp = words[0].word;
+			if(i == 0) {
+				bw.write(words[i].word + "\n");
+			}
+			if (i > 0){
+				tmp = words[i - 1].word;
+				if (!tmp.equals(words[i].word)) {
+					bw.write(words[i].word + "\n");
+				}
+			}
 		}
 
 		bw.close();
 		br.close();
 	}
 
-	static class Point implements Comparable<Point> {
-		int x;
-		int y;
+	static class MyWord implements Comparable<MyWord> {
+		String word;
 
-		public Point(int x, int y) {
-			this.x = x;
-			this.y = y;
+		public MyWord(String word) {
+			this.word = word;
 		}
 
 		@Override
-		public int compareTo(Point o) {
-			if (this.y >= o.y) {
-				if (this.y == o.y) {
-					if (this.x >= o.x) {
-						return 1;
-					} else {
-						return -1;
-					}
+		public int compareTo(MyWord o) {
+			if (this.word.length() >= o.word.length()) {
+				if (this.word.length() == o.word.length()) {
+					return this.word.compareTo(o.word);
 				} else {
 					return 1;
 				}
-
 			} else {
 				return -1;
 			}
