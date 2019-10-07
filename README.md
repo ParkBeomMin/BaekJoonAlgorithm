@@ -4,7 +4,8 @@
 
 ## README!
 
-풀이 코드는 각 브랜치 별로 확인하실 수 있습니다.
+풀이 코드는 각 브랜치 별로 확인하실 수 있습니다.  
+풀이 방법에 대한 내용은 [블로그]를 방문해주세요:)
 
 ## 푼 문제
 
@@ -15,6 +16,7 @@
 [10818] [10828] [10844] [10989] [11047] [11052] [11399] [11650] [11651] [11654]  
 [11720] [11866] [14909] [14910] [14911] [14912] [15953] [15954] [17213]  
 
+[블로그]: https://ParkBeomMin.github.io
 [1003]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/1003/src/Main.java
 [1018]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/1018/src/Main.java
 [1026]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/1026/src/Main.java
