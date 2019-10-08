@@ -15,7 +15,7 @@
 [2751] [2798] [4949] [5585] [7568] [9012] [9095] [9461] [10610] [10773]  
 [10809] [10814] [10818] [10828] [10844] [10989] [11047] [11052] [11399] [11650]  
 [11651] [11654] [11720] [11866] [14909] [14910] [14911] [14912] [15953] [15954]  
-[17213]  
+[17213] [17298] 
 
 [블로그]: https://ParkBeomMin.github.io
 [1003]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/1003/src/Main.java
@@ -79,3 +79,4 @@
 [15953]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/15953/src/Main.java
 [15954]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/15954/src/Main.java
 [17213]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/17213/src/Main.java
+[17298]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/17298/src/Main.java
