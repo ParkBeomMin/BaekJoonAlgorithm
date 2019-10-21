@@ -1,68 +1,71 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Deque;
-import java.util.LinkedList;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		int testCase = Integer.parseInt(br.readLine());
-		for (int i = 0; i < testCase; i++) {
-			String command = br.readLine();
-			int n = Integer.parseInt(br.readLine());
-			Deque<Integer> deque = new LinkedList<>();
-			String input = br.readLine();
-			input = input.substring(1, input.length() - 1);
-			String[] inputs = input.split(",");
-			boolean isError = false;
-			boolean isReverse = false;
-			for (int j = 0; j < inputs.length; j++) {
-				if (inputs[j].length() != 0) {
-					deque.offerLast(Integer.parseInt(inputs[j]));
-				}
+		int n = Integer.parseInt(br.readLine());
+		int[][] paper = new int[n][n];
+		int[] cnt = new int[3];
+		for (int i = 0; i < n; i++) {
+			String[] input = br.readLine().split(" ");
+			for (int j = 0; j < n; j++) {
+				paper[i][j] = Integer.parseInt(input[j]);
 			}
-			for (int j = 0; j < command.length(); j++) {
-				if (command.substring(j, j + 1).equals("R")) {
-					isReverse = !isReverse;
-				} else {
-					if (deque.isEmpty()) {
-						isError = true;
-					} else {
-						if (isReverse) {
-							deque.pollLast();
-						} else {
-							deque.pollFirst();
-						}
-					}
-				}
-			}
-			if (isError) {
-				System.out.print("error");
-			} else {
-				System.out.print("[");
-				while (!deque.isEmpty()) {
-					if (isReverse) {
-						if (deque.size() == 1) {
-							System.out.print(deque.pollLast());
-						} else {
-							System.out.print(deque.pollLast() + ",");
-						}
-					} else {
-						if (deque.size() == 1) {
-							System.out.print(deque.pollFirst());
-						} else {
-							System.out.print(deque.pollFirst() + ",");
-						}
-					}
-				}
-				System.out.print("]");
-			}
-			System.out.println();
-			deque.clear();
+		}
+		cut(paper, cnt);
+		System.out.println(cnt[0]);
+		System.out.println(cnt[1]);
+		System.out.println(cnt[2]);
+	}
+
+	static void cut(int[][] paper, int[] cnt) {
+		if (!isCut(paper, -1)) {
+			cnt[0]++;
+		} else if (!isCut(paper, 0)) {
+			cnt[1]++;
+		} else if (!isCut(paper, 1)) {
+			cnt[2]++;
+		} else {
+			cut(cut(paper, 0, paper.length / 3, 0, paper.length / 3), cnt); // 좌상단
+			cut(cut(paper, 0, paper.length / 3, paper.length / 3, 2 * paper.length / 3), cnt); // 중상단
+			cut(cut(paper, 0, paper.length / 3, 2 * paper.length / 3, paper.length), cnt); // 우상단
+			cut(cut(paper, paper.length / 3, 2 * paper.length / 3, 0, paper.length / 3), cnt); // 좌중단
+			cut(cut(paper, paper.length / 3, 2 * paper.length / 3, paper.length / 3, 2 * paper.length / 3), cnt); // 중중단
+			cut(cut(paper, paper.length / 3, 2 * paper.length / 3, 2 * paper.length / 3, paper.length), cnt); // 우중단
+			cut(cut(paper, 2 * paper.length / 3, paper.length, 0, paper.length / 3), cnt); // 좌하단
+			cut(cut(paper, 2 * paper.length / 3, paper.length, paper.length / 3, 2 * paper.length / 3), cnt); // 중하단
+			cut(cut(paper, 2 * paper.length / 3, paper.length, 2 * paper.length / 3, paper.length), cnt); // 우하단
 
 		}
+	}
+
+	static int[][] cut(int[][] paper, int rStart, int rEnd, int cStart, int cEnd) {
+		int[][] returnArr = new int[paper.length / 3][paper.length / 3];
+		for (int i = rStart; i < rEnd; i++) {
+			for (int j = cStart; j < cEnd; j++) {
+				returnArr[i - rStart][j - cStart] = paper[i][j];
+			}
+		}
+		return returnArr;
+	}
+
+	static boolean isCut(int[][] paper, int option) {// false면 안자르고, true면 자르거
+		boolean returnBool = true;
+		for (int i = 0; i < paper.length; i++) {
+			for (int j = 0; j < paper.length; j++) {
+				if (paper[i][j] != option) {
+					returnBool = false;
+					break;
+				}
+			}
+			if (!returnBool) {
+				break;
+			}
+		}
+		return !returnBool;
 	}
 
 }
