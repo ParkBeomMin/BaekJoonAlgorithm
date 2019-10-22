@@ -6,28 +6,33 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		int n = Integer.parseInt(br.readLine());
-		int m = Integer.parseInt(br.readLine());
-		int[] visited = new int[n + 1];
-		int[][] graph = new int[n + 1][n + 1];
-		int[] cnt = new int[1];
-		for (int i = 0; i < m; i++) {
-			String[] input = br.readLine().split(" ");
-			graph[Integer.parseInt(input[0])][Integer.parseInt(input[1])] = 1;
-			graph[Integer.parseInt(input[1])][Integer.parseInt(input[0])] = 1;
-		}
-		dfs(graph, visited, 1, cnt);
-		System.out.println(cnt[0]-1);
+		String[] input = br.readLine().split(" ");
+		int n = Integer.parseInt(input[0]);
+		int m = Integer.parseInt(input[1]);
+		int[] arr = new int[m];
+		dfs(arr, n, 0);
 	}
 
-	static void dfs(int[][] graph, int[] visited, int p, int[] cnt) {
-		visited[p] = 1;
-		cnt[0] += 1;
-		for (int i = 1; i < graph.length; i++) {
-			if (graph[p][i] == 1 && visited[i] == 0) {
+	static void dfs(int[] arr, int n, int p) {
+		if (p == arr.length) {
+			for (int i = 0; i < arr.length; i++) {
+				System.out.print(arr[i] + " ");
+			}
+			System.out.println();
+		} else {
+			for (int i = 1; i <= n; i++) {
+				if (p != 0) {
+					if (arr[p - 1] <= i) {
+						arr[p] = i;
+						dfs(arr, n, p + 1);
+					}
+				} else {
+					arr[p] = i;
+					dfs(arr, n, p + 1);
+				}
 
-				dfs(graph, visited, i, cnt);
 			}
 		}
 	}
+
 }
