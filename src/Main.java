@@ -1,69 +1,78 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		int n = Integer.parseInt(br.readLine());
-		int[][] area = new int[n][n];
-		int[][] visited = new int[n][n];
-		List<Integer> group = new ArrayList<>();
-		int groupId = 0;
-		for (int i = 0; i < n; i++) {
-			String input = br.readLine();
+		String[] input = br.readLine().split(" ");
+		int n = Integer.parseInt(input[0]);
+		int m = Integer.parseInt(input[1]);
+		int[][] tomato = new int[m][n];
+		for (int i = 0; i < m; i++) {
+			String[] status = br.readLine().split(" ");
 			for (int j = 0; j < n; j++) {
-				area[i][j] = Integer.parseInt(input.substring(j, j + 1));
+				tomato[i][j] = Integer.parseInt(status[j]);
 			}
 		}
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				if (area[i][j] == 1 && visited[i][j] == 0) {
-					groupId++;
-					dfs(area, visited, group, groupId, i, j);
-				}
-			}
-		}
-		int[] result = new int[groupId];
-		Collections.sort(group);
-		for (int i = 1; i <= groupId; i++) {
-			for (int j = 0; j < group.size(); j++) {
-				if (group.get(j) == i) {
-					result[i-1]++;
-				}
-			}
-		}
-		Arrays.sort(result);
-		System.out.println(result.length);
-		for (int groupNum : result) {
-			System.out.println(groupNum);
-		}
-
+		bfs(tomato);
 	}
 
-	static void dfs(int[][] area, int[][] visited, List<Integer> group, int groupId, int x, int y) {
-		int[] dx = { -1, 0, 1, 0 }; // 좌상우하
+	static void bfs(int[][] tomato) {
+		int[] dx = { -1, 0, 1, 0 };
 		int[] dy = { 0, -1, 0, 1 };
-		visited[x][y] = 1;
-		group.add(groupId);
-
-		for (int i = 0; i < 4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			if (nx >= 0 && ny >= 0 && nx < area.length && ny < area.length) {
-				if (area[nx][ny] == 1 && visited[nx][ny] == 0) {
-					dfs(area, visited, group, groupId, nx, ny);
+		Queue<Dot> queue = new LinkedList<>();
+		for (int i = 0; i < tomato.length; i++) {
+			for (int j = 0; j < tomato[i].length; j++) {
+				if (tomato[i][j] == 1) {
+					queue.add(new Dot(i, j));
 				}
-
 			}
 		}
-
+		while (!queue.isEmpty()) {
+			Dot dot = queue.poll();
+			for (int i = 0; i < 4; i++) {
+				int x = dot.x + dx[i];
+				int y = dot.y + dy[i];
+				if (x < 0 || x >= tomato.length || y < 0 || y >= tomato[0].length) {
+					continue;
+				}
+				if (tomato[x][y] != 0) {
+					continue;
+				} else {
+					queue.add(new Dot(x, y));
+					tomato[x][y] = tomato[dot.x][dot.y] + 1;
+				}
+			}
+		}
+		System.out.print(statusCheck(tomato));
 	}
 
+	static int statusCheck(int[][] tomato) {
+		int tmp = 0;
+		for (int i = 0; i < tomato.length; i++) {
+			for (int j = 0; j < tomato[i].length; j++) {
+				if (tomato[i][j] == 0) {
+					return -1;
+				}
+				if (tmp < tomato[i][j]) {
+					tmp = tomato[i][j];
+				}
+			}
+		}
+		return tmp - 1;
+	}
+
+	static class Dot {
+		int x;
+		int y;
+
+		public Dot(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 }
