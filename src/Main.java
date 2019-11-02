@@ -8,56 +8,50 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		int n = Integer.parseInt(br.readLine());
-		int[][] cost = new int[n][n];
-		boolean[][] visited = new boolean[n][n];
-		for (int i = 0; i < n; i++) {
+		int testCase = Integer.parseInt(br.readLine());
+		for (int t = 0; t < testCase; t++) {
+
 			String[] input = br.readLine().split(" ");
-			for (int j = 0; j < n; j++) {
-				cost[i][j] = Integer.parseInt(input[j]);
+			int m = Integer.parseInt(input[0]);
+			int n = Integer.parseInt(input[1]);
+			int k = Integer.parseInt(input[2]);
+			int[][] farm = new int[m][n];
+			int[][] visited = new int[m][n];
+			int answer = 0;
+			for (int i = 0; i < k; i++) {
+				String[] points = br.readLine().split(" ");
+				farm[Integer.parseInt(points[0])][Integer.parseInt(points[1])] = 1;
 			}
-		}
-
-		dfs(cost, visited, 0, 0);
-		System.out.println(min);
-
-	}
-
-	static void dfs(int[][] cost, boolean[][] visited, int depth, int sum) {
-		int[] dx = { 0, -1, 0, 1, 0 };
-		int[] dy = { 0, 0, -1, 0, 1 };
-		if (depth == 3) {
-			min = Math.min(min, sum);
-		} else {
-			for (int i = 1; i < cost.length - 1; i++) {
-				for (int j = 1; j < cost.length - 1; j++) {
-					if (check(visited, i, j)) {
-						for (int k = 0; k < 5; k++) {
-							visited[i + dx[k]][j + dy[k]] = true;
-						}
-						for (int k = 0; k < 5; k++) {
-							sum += cost[i + dx[k]][j + dy[k]];
-						}
-						dfs(cost, visited, depth + 1, sum);
-						for (int k = 0; k < 5; k++) {
-							visited[i + dx[k]][j + dy[k]] = false;
-							sum -= cost[i + dx[k]][j + dy[k]];
-						}
+			for (int i = 0; i < m; i++) {
+				for (int j = 0; j < n; j++) {
+					if (visited[i][j] == 0 && farm[i][j] == 1) {
+						dfs(farm, visited, i, j, n, m);
+						answer++;
 					}
 				}
 			}
+			System.out.println(answer);
+
 		}
 	}
 
-	static boolean check(boolean[][] visited, int x, int y) {
-		boolean tmp = true;
-		int[] dx = { 0, -1, 0, 1, 0 };
-		int[] dy = { 0, 0, -1, 0, 1 };
-		for (int i = 0; i < 5; i++) {
-			if (visited[x + dx[i]][y + dy[i]]) {
-				tmp = false;
+	static void dfs(int[][] farm, int[][] visited, int x, int y, int n, int m) {
+		int[] dx = { -1, 0, 1, 0 };
+		int[] dy = { 0, -1, 0, 1 };
+		if (visited[x][y] == 1) {
+			return;
+		}
+		visited[x][y] = 1;
+		for (int k = 0; k < 4; k++) {
+			int nx = x + dx[k];
+			int ny = y + dy[k];
+			if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
+				if (farm[nx][ny] == 1) {
+					dfs(farm, visited, nx, ny, n, m);
+				}
+
 			}
 		}
-		return tmp;
 	}
+
 }
