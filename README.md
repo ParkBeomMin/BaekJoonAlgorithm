@@ -11,11 +11,11 @@
 
 [1003] [1018] [1026] [1094] [1149] [1157] [1181] [1260] [1427] [1436]  
 [1463] [1541] [1568] [1874] [1904] [1931] [1932] [1966] [2108] [2156]  
-[2163] [2164] [2193] [2217] [2231] [2455] [2579] [2630] [2675] [2748]  
-[2750] [2751] [2798] [4949] [5585] [7568] [9012] [9095] [9461] [10610]  
-[10773] [10809] [10814] [10818] [10828] [10844] [10989] [11047] [11052] [11053]  
-[11399] [11650] [11651] [11654] [11720] [11866] [14909] [14910] [14911] [14912]  
-[15953] [15954] [17213] [17298]  
+[2163] [2164] [2193] [2206] [2217] [2231] [2455] [2579] [2630] [2675]  
+[2748] [2750] [2751] [2798] [4949] [5585] [7568] [9012] [9095] [9461]  
+[10610] [10773] [10809] [10814] [10818] [10828] [10844] [10989] [11047] [11052]  
+[11053] [11399] [11650] [11651] [11654] [11720] [11866] [14909] [14910] [14911]  
+[14912] [15953] [15954] [17213] [17298]  
 
 [블로그]: https://ParkBeomMin.github.io
 [1003]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/1003/src/Main.java
@@ -41,6 +41,7 @@
 [2163]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2163/src/Main.java
 [2164]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2164/src/Main.java
 [2193]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2193/src/Main.java
+[2206]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2206/src/Main.java
 [2217]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2217/src/Main.java
 [2231]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2231/src/Main.java
 [2455]: https://github.com/ParkBeomMin/BaekJoonAlgorithm/blob/2455/src/Main.java
