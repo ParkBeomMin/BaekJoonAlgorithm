@@ -8,50 +8,77 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		int max = 100000;
 		String[] input = br.readLine().split(" ");
 		int n = Integer.parseInt(input[0]);
-		int k = Integer.parseInt(input[1]);
-		bfs(n, k, max);
+		int m = Integer.parseInt(input[1]);
+		int[][] maze = new int[n][m];
+		for (int i = 0; i < n; i++) {
+			String tmp = br.readLine();
+			for (int j = 0; j < m; j++) {
+				maze[i][j] = Integer.parseInt(tmp.substring(j, j + 1));
+			}
+		}
+		bfs(maze, n, m);
+
 	}
 
-	static void bfs(int n, int k, int max) {
+	static void bfs(int[][] maze, int n, int m) {
+		int[] dx = { -1, 1, 0, 0 };
+		int[] dy = { 0, 0, -1, 1 };
+		int answer = -1;
+		int distance = 0;
+		boolean[][][] visited = new boolean[n][m][2]; // 맨 마지막 0이면, 벽 안뚫고 간거!
 		Queue<Point> queue = new LinkedList<>();
-		int sec = 0;
-		boolean[] visited = new boolean[max + 1];
-		queue.offer(new Point(n, sec));
-		visited[n] = true;
+		queue.offer(new Point(0, 0, 1, false));
+		visited[0][0][0] = true;
 		while (!queue.isEmpty()) {
 			Point tmp = queue.poll();
 			int x = tmp.x;
-			sec = tmp.second;
-			if (x == k) {
+			int y = tmp.y;
+			boolean b = tmp.isCracked;
+			distance = tmp.distance;
+			if (x == n - 1 && y == m - 1) {
+				answer = distance;
 				break;
-			} else {
-				if (x - 1 >= 0 && !visited[x - 1]) {
-					queue.offer(new Point(x - 1, sec + 1));
-					visited[x - 1] = true;
+			}
+			for (int i = 0; i < 4; i++) {
+				int nx = x + dx[i];
+				int ny = y + dy[i];
+				if (nx < 0 || nx >= n || ny < 0 || ny >= m) {
+					continue;
 				}
-				if (x + 1 <= max && !visited[x + 1]) {
-					queue.offer(new Point(x + 1, sec + 1));
-					visited[x + 1] = true;
+				if (maze[nx][ny] == 1) {
+					if (!b && !visited[nx][ny][1]) { // 벽을 부숨
+						queue.offer(new Point(nx, ny, distance + 1, true));
+						visited[nx][ny][1] = true;
+					}
+				} else {
+					if (!b && !visited[nx][ny][0]) { // 벽을 안부수고 가는 경우
+						queue.offer(new Point(nx, ny, distance + 1, b));
+						visited[nx][ny][0] = true;
+					}
+					if (b && !visited[nx][ny][1]) { // 벽을 부수고 가는 경우
+						queue.offer(new Point(nx, ny, distance + 1, b));
+						visited[nx][ny][1] = true;
+					}
 				}
-				if (2 * x <= max && !visited[2 * x]) {
-					queue.offer(new Point(2 * x, sec + 1));
-					visited[2 * x] = true;
-				}
+
 			}
 		}
-		System.out.println(sec);
+		System.out.println(answer);
 	}
 
 	static class Point {
 		int x;
-		int second;
+		int y;
+		boolean isCracked;
+		int distance;
 
-		public Point(int x, int second) {
+		public Point(int x, int y, int distance, boolean isCracked) {
 			this.x = x;
-			this.second = second;
+			this.y = y;
+			this.isCracked = isCracked;
+			this.distance = distance;
 		}
 	}
 }
