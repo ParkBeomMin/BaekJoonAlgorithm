@@ -1,84 +1,72 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
 		String[] input = br.readLine().split(" ");
-		int n = Integer.parseInt(input[0]);
-		int m = Integer.parseInt(input[1]);
-		int[][] maze = new int[n][m];
-		for (int i = 0; i < n; i++) {
-			String tmp = br.readLine();
-			for (int j = 0; j < m; j++) {
-				maze[i][j] = Integer.parseInt(tmp.substring(j, j + 1));
+		int v = Integer.parseInt(input[0]);
+		int e = Integer.parseInt(input[1]);
+		int start = Integer.parseInt(br.readLine());
+		int[] dist = new int[v];
+		boolean[] visited = new boolean[v];
+		PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> {
+			return a.weight > b.weight ? 1 : -1;
+		});
+		ArrayList<ArrayList<Node>> graph = new ArrayList<>();
+		for (int i = 0; i < v; i++) {
+			graph.add(new ArrayList<>());
+		}
+		for (int i = 0; i < e; i++) {
+			String[] tmp = br.readLine().split(" ");
+			int x = Integer.parseInt(tmp[0]);
+			int y = Integer.parseInt(tmp[1]);
+			int w = Integer.parseInt(tmp[2]);
+			graph.get(x - 1).add(new Node(y - 1, w));
+		}
+		for (int i = 0; i < dist.length; i++) {
+			dist[i] = Integer.MAX_VALUE;
+		}
+
+		dist[start - 1] = 0;
+		pq.offer(new Node(start - 1, 0));
+		while (!pq.isEmpty()) {
+			Node tmp = pq.poll();
+			if (visited[tmp.index]) {
+				continue;
+			}
+			visited[tmp.index] = true;
+			if (tmp.weight < dist[tmp.index]) {
+				dist[tmp.index] = tmp.weight;
+			}
+			for (Node node : graph.get(tmp.index)) {
+				if (dist[node.index] > dist[tmp.index] + node.weight) {
+					dist[node.index] = dist[tmp.index] + node.weight;
+					pq.offer(new Node(node.index, dist[node.index]));
+				}
 			}
 		}
-		bfs(maze, n, m);
 
-	}
-
-	static void bfs(int[][] maze, int n, int m) {
-		int[] dx = { -1, 1, 0, 0 };
-		int[] dy = { 0, 0, -1, 1 };
-		int answer = -1;
-		int distance = 0;
-		boolean[][][] visited = new boolean[n][m][2]; // 맨 마지막 0이면, 벽 안뚫고 간거!
-		Queue<Point> queue = new LinkedList<>();
-		queue.offer(new Point(0, 0, 1, false));
-		visited[0][0][0] = true;
-		while (!queue.isEmpty()) {
-			Point tmp = queue.poll();
-			int x = tmp.x;
-			int y = tmp.y;
-			boolean b = tmp.isCracked;
-			distance = tmp.distance;
-			if (x == n - 1 && y == m - 1) {
-				answer = distance;
-				break;
-			}
-			for (int i = 0; i < 4; i++) {
-				int nx = x + dx[i];
-				int ny = y + dy[i];
-				if (nx < 0 || nx >= n || ny < 0 || ny >= m) {
-					continue;
-				}
-				if (maze[nx][ny] == 1) {
-					if (!b && !visited[nx][ny][1]) { // 벽을 부숨
-						queue.offer(new Point(nx, ny, distance + 1, true));
-						visited[nx][ny][1] = true;
-					}
-				} else {
-					if (!b && !visited[nx][ny][0]) { // 벽을 안부수고 가는 경우
-						queue.offer(new Point(nx, ny, distance + 1, b));
-						visited[nx][ny][0] = true;
-					}
-					if (b && !visited[nx][ny][1]) { // 벽을 부수고 가는 경우
-						queue.offer(new Point(nx, ny, distance + 1, b));
-						visited[nx][ny][1] = true;
-					}
-				}
-
+		for (int i = 0; i < dist.length; i++) {
+			if (dist[i] == Integer.MAX_VALUE) {
+				System.out.println("INF");
+			} else {
+				System.out.println(dist[i]);
 			}
 		}
-		System.out.println(answer);
 	}
 
-	static class Point {
-		int x;
-		int y;
-		boolean isCracked;
-		int distance;
+	static class Node {
+		int index;
+		int weight;
 
-		public Point(int x, int y, int distance, boolean isCracked) {
-			this.x = x;
-			this.y = y;
-			this.isCracked = isCracked;
-			this.distance = distance;
+		public Node(int index, int weight) {
+			this.index = index;
+			this.weight = weight;
 		}
 	}
 }
