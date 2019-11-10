@@ -9,7 +9,7 @@ public class Main {
 		BufferedReader br = new BufferedReader(isr);
 		int n = Integer.parseInt(br.readLine());
 		int answer = 0;
-		PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> a < b ? 1 : -1);
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
 		for (int i = 0; i < n; i++) {
 			int num = Integer.parseInt(br.readLine());
 			if (num > 0) {
