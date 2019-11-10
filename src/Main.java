@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class Main {
@@ -10,40 +9,38 @@ public class Main {
 		BufferedReader br = new BufferedReader(isr);
 		int n = Integer.parseInt(br.readLine());
 		int answer = 0;
-		PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
-
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				if (Math.abs(o1) >= Math.abs(o2)) { // 너(o2)가 나(o1)보다 작냐? 맞으면 앞으로(오름차순)
-					if (Math.abs(o1) == Math.abs(o2)) {
-						if (o1 >= o2) {
-							return 1;
-						} else {
-							return -1;
-						}
-					} else {
-						return 1;
-					}
-				} else {
-					return -1;
-				}
-			}
-
-		});
+		PriorityQueue<Integer> minPq = new PriorityQueue<>((a, b) -> a < b ? 1 : -1);
+		PriorityQueue<Integer> maxPq = new PriorityQueue<>();
 		for (int i = 0; i < n; i++) {
 			int num = Integer.parseInt(br.readLine());
-			if (num != 0) {
-				pq.offer(num);
+			if (i == 0) {
+				answer = num;
 			} else {
-				if (!pq.isEmpty()) {
-					answer = pq.poll();
+				if (answer >= num) {
+					minPq.offer(num);
 				} else {
-					answer = 0;
+					maxPq.offer(num);
 				}
-				System.out.println(answer);
+
+				if ((minPq.size() + maxPq.size() + 1) % 2 == 0) { // 짝수면 중간값에서 작은 값
+					if (minPq.size() > maxPq.size()) {
+						int tmp = answer;
+						answer = minPq.poll();
+						maxPq.offer(tmp);
+					}
+				} else {
+					if (minPq.size() > maxPq.size()) {
+						int tmp = answer;
+						answer = minPq.poll();
+						maxPq.offer(tmp);
+					} else if (maxPq.size() > minPq.size()) {
+						int tmp = answer;
+						answer = maxPq.poll();
+						minPq.offer(tmp);
+					}
+				}
 			}
+			System.out.println(answer);
 		}
-
 	}
-
 }
