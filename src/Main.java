@@ -1,46 +1,45 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
 		int n = Integer.parseInt(br.readLine());
-		int answer = 0;
-		PriorityQueue<Integer> minPq = new PriorityQueue<>((a, b) -> a < b ? 1 : -1);
-		PriorityQueue<Integer> maxPq = new PriorityQueue<>();
+		int[][] arr = new int[n][n];
+		int[] visited = new int[n];
 		for (int i = 0; i < n; i++) {
-			int num = Integer.parseInt(br.readLine());
-			if (i == 0) {
-				answer = num;
-			} else {
-				if (answer >= num) {
-					minPq.offer(num);
-				} else {
-					maxPq.offer(num);
-				}
+			String[] input = br.readLine().split(" ");
+			for (int j = 0; j < n; j++) {
+				arr[i][j] = Integer.parseInt(input[j]);
+			}
+		}
 
-				if ((minPq.size() + maxPq.size() + 1) % 2 == 0) { // 짝수면 중간값에서 작은 값
-					if (minPq.size() > maxPq.size()) {
-						int tmp = answer;
-						answer = minPq.poll();
-						maxPq.offer(tmp);
-					}
-				} else {
-					if (minPq.size() > maxPq.size()) {
-						int tmp = answer;
-						answer = minPq.poll();
-						maxPq.offer(tmp);
-					} else if (maxPq.size() > minPq.size()) {
-						int tmp = answer;
-						answer = maxPq.poll();
-						minPq.offer(tmp);
-					}
+		for (int i = 0; i < n; i++) {
+			dfs(arr, visited, i);
+			for (int j = 0; j < n; j++) {
+				if (visited[j] == 1) {
+					arr[i][j] = 1;
 				}
 			}
-			System.out.println(answer);
+			visited = new int[n];
+		}
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				System.out.print(arr[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+
+	static void dfs(int[][] arr, int[] visited, int x) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[x][i] == 1 && visited[i] == 0) {
+				visited[i] = 1;
+				dfs(arr, visited, i);
+			}
 		}
 	}
 }
