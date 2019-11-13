@@ -6,33 +6,41 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
-		String[] input = br.readLine().split(" ");
-		int n = Integer.parseInt(input[0]);
-		int feel = Integer.parseInt(input[1]);
-		double good = 0;
-		double bad = 0;
-		double[] probs = new double[4];
-		String[] probInput = br.readLine().split(" ");
-		for (int i = 0; i < probs.length; i++) {
-			probs[i] = Double.parseDouble(probInput[i]);
+		String a = br.readLine();
+		String b = br.readLine();
+
+		int[][] arr = new int[b.length() + 1][a.length() + 1];
+		String answer = "";
+		int maxLength = 0;
+
+		for (int i = 1; i <= b.length(); i++) {
+			int tmp = 0;
+			for (int j = 1; j <= a.length(); j++) {
+				if (b.substring(i - 1, i).equals(a.substring(j - 1, j))) {
+					tmp = arr[i - 1][j - 1] + 1;
+					arr[i][j] = tmp;
+				} else {
+					arr[i][j] = Math.max(arr[i - 1][j], arr[i][j - 1]);
+				}
+			}
+			if (maxLength < tmp) {
+				maxLength = tmp;
+			}
 		}
-		if (feel == 0) {// 좋은날
-			good = probs[0];
-			bad = probs[1];
-		} else {
-			good = probs[2];
-			bad = probs[3];
+		int tmp = a.length();
+		for (int i = b.length(); i > 0; i--) {
+			for (int j = tmp; j > 0; j--) {
+				if (arr[i][j] == maxLength && arr[i][j - 1] == maxLength - 1 && arr[i - 1][j - 1] == maxLength - 1
+						&& arr[i - 1][j] == maxLength - 1) {
+					answer = a.substring(j - 1, j) + answer;
+					maxLength--;
+					tmp = j;
+					break;
+				}
+			}
 		}
 
-		for (int i = 0; i < n - 1; i++) {
-			double goodTmp = good;
-			double badTmp = bad;
-			good = goodTmp * probs[0] + badTmp * probs[2];
-			bad = goodTmp * probs[1] + badTmp * probs[3];
-		}
-
-		System.out.println(Math.round(good * 1000));
-		System.out.println(Math.round(bad * 1000));
+		System.out.print(answer);
 	}
 
 }
